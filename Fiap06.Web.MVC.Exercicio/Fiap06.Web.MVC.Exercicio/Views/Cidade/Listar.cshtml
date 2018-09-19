@@ -1,0 +1,64 @@
+﻿@model List<Fiap06.Web.MVC.Exercicio.Models.Cidade>
+
+@{
+    ViewBag.Title = "Listar";
+}
+
+<h2>Cidades</h2>
+
+@using (Html.BeginForm("Buscar","Cidade",FormMethod.Get, new { @class = "form-inline" }))
+{
+    @Html.DropDownList("Estado",ViewBag.estados as SelectList, "Selecione", new {@class = "form-control"})
+    <input type="submit" value="Buscar" class="btn btn-primary"/>
+}
+
+<table class="table table-striped">
+
+    <tr>
+        <th>Código</th>
+        <th>Nome</th>
+        <th>Data de Fundação</th>
+        <th>Estado</th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.CidadeId</td>
+            <td>@item.Nome</td>
+            <td>@item.DataFundacao.ToShortDateString()</td>
+            <td>@item.Estado.Sigla</td>
+            <td>
+                @Html.ActionLink("Atualizar", "Editar", new { id = item.CidadeId }, new { @class = "btn btn-info btn-xs" })
+                <button onclick="codigoEsp.value = @item.CidadeId" type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal">
+                    Excluir
+                </button>
+            </td>
+        </tr>
+    }
+
+</table>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Confirmação</h4>
+            </div>
+            <div class="modal-body">
+                Deseja realmente excluir a especialidade?
+            </div>
+            <div class="modal-footer">
+                @using (Html.BeginForm("Excluir", "Cidade"))
+                {
+                    <input type="hidden" name="id" id="codigoEsp" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Excluir</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>

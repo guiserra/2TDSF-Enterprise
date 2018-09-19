@@ -1,0 +1,63 @@
+﻿@model List<Fiap04.Web.MVC.Models.Produto>
+
+@{
+    ViewBag.Title = "Listar";
+}
+
+<h2>Listar</h2>
+
+<!-- Método, Classe, HTTP Method -->
+@using (Html.BeginForm("Buscar","Produto",FormMethod.Get, new { @class = "form-inline"}))
+{
+    <input type="text" name="nomeBusca" placeholder="Digite o nome" class="form-control" />
+    <input type="submit" value="Pesquisar" class="btn btn-success" />
+}
+<table class="table">
+
+    <tr>
+        <th>Código</th>
+        <th>Nome</th>
+        <th>Descrição</th>
+        <th>Data Validade</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.ProdutoId</td>
+            <td>@item.Nome</td>
+            <td>@item.Descricao</td>
+            <td>@item.Validade</td>
+            <td>
+                <!-- Button trigger modal -->
+                <button onclick="codigoProduto.value = @item.ProdutoId" type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal">
+                    Excluir
+                </button>
+                @Html.ActionLink("Atualizar", "Editar", new { id = item.ProdutoId }, new { @class = "btn btn-info btn-xs" })
+            </td>
+        </tr>
+
+    }
+
+</table>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Deseja Excluir?</h4>
+            </div>
+            <div class="modal-body">
+                <p>Isso não tem volta! Tem Certeza?</p>
+            </div>
+            <div class="modal-footer">
+                @using (Html.BeginForm("Excluir", "Produto"))
+                {
+                    <input type="hidden" name="id" id="codigoProduto" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Confirmar</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
