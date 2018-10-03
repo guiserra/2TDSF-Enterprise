@@ -5,20 +5,30 @@
 }
 
 <h2>Cidades</h2>
-
-@using (Html.BeginForm("Buscar","Cidade",FormMethod.Get, new { @class = "form-inline" }))
+@if (TempData["msg"] != null)
 {
-    @Html.DropDownList("Estado",ViewBag.estados as SelectList, "Selecione", new {@class = "form-control"})
-    <input type="submit" value="Buscar" class="btn btn-primary"/>
+    <div class="alert alert-success">
+        @TempData["msg"]
+    </div>
 }
-
-<table class="table table-striped">
-
+@using (Html.BeginForm("Buscar", "Cidade",
+        FormMethod.Get, new { @class = "form-inline" }))
+{
+    @Html.DropDownList("estado",
+        ViewBag.estados as SelectList,
+        "Selecione",
+        new { @class = "form-control" })
+    <input type="submit" value="Buscar" class="btn btn-primary" />
+}
+<br />
+<table class="table">
     <tr>
         <th>Código</th>
         <th>Nome</th>
-        <th>Data de Fundação</th>
+        <th>Data Fundação</th>
         <th>Estado</th>
+        <th>Região</th>
+        <th>Carro por Aplicativo</th>
         <th></th>
     </tr>
     @foreach (var item in Model)
@@ -28,19 +38,23 @@
             <td>@item.Nome</td>
             <td>@item.DataFundacao.ToShortDateString()</td>
             <td>@item.Estado.Sigla</td>
+            <td>@item.Regiao</td>
+            <td>@(item.CarroPorAplicativo ? "Sim" : "Não")</td>
             <td>
-                @Html.ActionLink("Atualizar", "Editar", new { id = item.CidadeId }, new { @class = "btn btn-info btn-xs" })
-                <button onclick="codigoEsp.value = @item.CidadeId" type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal">
+                <!-- Button trigger modal -->
+                <button onclick="codigoCidade.value = @item.CidadeId" type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myModal">
+                    Carro por aplicativo
+                </button>
+                @Html.ActionLink("Editar","Editar",
+                    new { id = item.CidadeId}, new { @class = "btn btn-info btn-sm"})
+                <!-- Button trigger modal -->
+                <button onclick="codigoCidade.value = @item.CidadeId" type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">
                     Excluir
                 </button>
             </td>
         </tr>
     }
-
 </table>
-
-
-<!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -49,12 +63,12 @@
                 <h4 class="modal-title" id="myModalLabel">Confirmação</h4>
             </div>
             <div class="modal-body">
-                Deseja realmente excluir a especialidade?
+                Deseja realmente excluir a cidade?
             </div>
             <div class="modal-footer">
                 @using (Html.BeginForm("Excluir", "Cidade"))
                 {
-                    <input type="hidden" name="id" id="codigoEsp" />
+                    <input type="hidden" name="codigo" id="codigoCidade" />
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-danger">Excluir</button>
                 }
@@ -62,3 +76,4 @@
         </div>
     </div>
 </div>
+

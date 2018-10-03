@@ -11,6 +11,19 @@ namespace Fiap06.Web.MVC.Exercicio.UnitOfWork
     {
         private BrasilContext _context = new BrasilContext();
         private IEstadoRepository _estadoRepository;
+        private ICidadeRepository _cidadeRepository;
+
+        public ICidadeRepository CidadeRepository
+        {
+            get
+            {
+                if (_cidadeRepository == null)
+                {
+                    _cidadeRepository = new CidadeRepository(_context);
+                }
+                return _cidadeRepository;
+            }
+        }
 
         public IEstadoRepository EstadoRepository
         {
