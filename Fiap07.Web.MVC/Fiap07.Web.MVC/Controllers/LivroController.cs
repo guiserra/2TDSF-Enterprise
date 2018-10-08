@@ -12,6 +12,22 @@ namespace Fiap07.Web.MVC.Controllers
     {
         private UnitOfWork _unit = new UnitOfWork();
 
+        [HttpPost]
+        public ActionResult Excluir(int codigo)
+        {
+            _unit.LivroRepository.Remover(codigo);
+            _unit.Salvar();
+            TempData["msg"] = "Livro Excluido";
+            return RedirectToAction("Listar");
+        }
+
+        [HttpGet]
+        public ActionResult Buscar(string titulo)
+        {
+            var livros = _unit.LivroRepository.BuscarPor(l => l.Titulo.Contains(titulo));
+            return View("Listar", livros);
+        }
+
         [HttpGet]
         public ActionResult Listar()
         {
@@ -38,7 +54,7 @@ namespace Fiap07.Web.MVC.Controllers
         protected override void Dispose(bool disposing)
         {
             _unit.Dispose();
-            base.Dispose(disposing);    
+            base.Dispose(disposing);
         }
     }
 }

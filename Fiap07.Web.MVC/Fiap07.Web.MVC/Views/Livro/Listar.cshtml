@@ -5,12 +5,20 @@
 
 <h2>Lista de Livros</h2>
 
+@using (Html.BeginForm("Buscar", "Livro", FormMethod.Get))
+{
+    @Html.TextBox("titulo", null, new { @class = "form-inline" })
+    <input type="submit" value="Buscar" class="btn btn-primary btn-sm" />
+}
+<br />
+
 <table class="table table-striped">
     <tr>
         <th>Código</th>
         <th>Título</th>
         <th>Páginas</th>
         <th>Editora</th>
+        <th></th>
     </tr>
     @foreach (var item in Model)
     {
@@ -19,6 +27,34 @@
             <td>@item.Titulo</td>
             <td>@item.Paginas</td>
             <td>@item.Editora.Nome</td>
+            <td>
+                <!-- Button trigger modal -->
+                <button type="button" onclick="codigoLivro.value = @item.LivroId" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">
+                    Excluir
+                </button>
+            </td>
         </tr>
     }
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Excluir Livro</h4>
+                </div>
+                <div class="modal-body">
+                    Tem certeza que deseja excluir este livro?
+                </div>
+                <div class="modal-footer">
+                    @Html.BeginForm("Excluir", "Livro"){
+                    <input type="hidden" name="codigo" id="codigoLivro" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-primary">Confirmar</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 </table>
